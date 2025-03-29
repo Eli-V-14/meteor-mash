@@ -6,7 +6,7 @@ import pygame
 def generateButtons(heights, texts):
     buttons = []
     for i in range(len(heights)):
-        button = Button(WINDOWN_HALF_WIDTH / 2 - HALF_BUTTON_WIDTH, 
+        button = Button(WINDOW_HALF_WIDTH / 2 - HALF_BUTTON_WIDTH, 
                  heights[i], 
                  BUTTON_WIDTH, 
                  BUTTON_HEIGHT, 
@@ -38,7 +38,7 @@ class Start:
         rect = text.get_rect()
 
         self.display.fill(Color('black'))
-        self.display.blit(text, ((WINDOWN_HALF_WIDTH / 2) - rect.bottomright[0] * 1/2, int(WINDOW_HEIGHT * 0.25)))
+        self.display.blit(text, ((WINDOW_HALF_WIDTH / 2) - rect.bottomright[0] * 1/2, int(WINDOW_HEIGHT * 0.25)))
 
         for button in self.buttons:
             button.update_buttons(self.display, events)

@@ -1,6 +1,7 @@
 from settings import *
-from pygame import Color
 from spaceship import Spaceship
+from pygame import Color
+from bullet import Bullet
 import pygame
 
 class Level:
@@ -9,6 +10,7 @@ class Level:
         self.display = display
         self.gameStateManager = gameStateManager
         self.spaceship = Spaceship(self.display)
+        self.bullets = []
     
     def run(self, events):
         font = pygame.font.Font('fonts/sonic-advance-2-regular.ttf', int(WINDOW_HEIGHT * 0.025))
@@ -21,6 +23,13 @@ class Level:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.gameStateManager.set_state('pause')
+                elif event.key == pygame.K_SPACE:
+                    self.bullets.append(Bullet(self.display, self.spaceship))
+        
+        for bullet in self.bullets:
+            bullet.update()
+
+        self.bullets = [bullet for bullet in self.bullets if not bullet.off_screen()]
         
         self.spaceship.update(events)
                 

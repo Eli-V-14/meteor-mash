@@ -10,7 +10,7 @@ class Game:
     def __init__(self):
         pygame.init()
         self.running = True
-        self.screen = pygame.display.set_mode((WINDOWN_HALF_WIDTH, WINDOW_HEIGHT))
+        self.screen = pygame.display.set_mode((WINDOW_HALF_WIDTH, WINDOW_HEIGHT))
 
         pygame.display.flip()
 
