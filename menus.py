@@ -3,35 +3,34 @@ from pygame import Color
 from button import Button
 import pygame
 
-button1 = Button(WINDOWN_HALF_WIDTH / 2 - HALF_BUTTON_WIDTH, 
-                 WINDOW_HALF_HEIGHT + HALF_BUTTON_HEIGHT, 
+def generateButtons(heights, texts):
+    buttons = []
+    for i in range(len(heights)):
+        button = Button(WINDOWN_HALF_WIDTH / 2 - HALF_BUTTON_WIDTH, 
+                 heights[i], 
                  BUTTON_WIDTH, 
                  BUTTON_HEIGHT, 
                  int(WINDOW_HEIGHT * 0.05),
                  font='fonts/sonic-advance-2-regular.ttf')
 
-button1.set_border_color(Color('white'))
-button1.set_fill_color(Color('black'))
-button1.set_text('Play', Color('white'))
-
-button2 = Button(WINDOWN_HALF_WIDTH / 2 - HALF_BUTTON_WIDTH, 
-                WINDOW_HALF_HEIGHT + BUTTON_HEIGHT * 1.75, 
-                BUTTON_WIDTH, 
-                BUTTON_HEIGHT, 
-                int(WINDOW_HEIGHT * 0.05),
-                 font='fonts/sonic-advance-2-regular.ttf')
-
-button2.set_border_color(Color('white'))
-button2.set_fill_color(Color('black'))
-button2.set_text('Quit', Color('white'))
-
-
+        button.set_border_color(Color('white'))
+        button.set_fill_color(Color('black'))
+        button.set_text(texts[i], Color('white'))
+        buttons.append(button)
+    return buttons
 
 class Start:
     def __init__(self, display, gameStateManager):
+        pygame.init()
         self.display = display
         self.gameStateManager = gameStateManager
-        self.buttons = [button1, button2]
+        self.button_heights = [WINDOW_HALF_HEIGHT + HALF_BUTTON_HEIGHT, WINDOW_HALF_HEIGHT + BUTTON_HEIGHT * 1.75]
+        self.button_texts = ['Play', 'Quit']
+
+        self.buttons = generateButtons(self.button_heights, self.button_texts)
+
+        self.button1 = self.buttons[0]
+        self.button2 = self.buttons[1]
 
     def run(self, events):
         font = pygame.font.Font('fonts/sonic-advance-2-regular.ttf', int(WINDOW_HEIGHT * 0.1))
@@ -44,51 +43,27 @@ class Start:
         for button in self.buttons:
             button.update_buttons(self.display, events)
         
-        if button1.clicked:
+        if self.button1.clicked:
             self.gameStateManager.set_state('level')
-            button1.button_clicked()
+            self.button1.button_clicked()
         
-        if button2.clicked:
+        if self.button2.clicked:
             pygame.quit()
-
-button3 = Button(WINDOWN_HALF_WIDTH / 2 - HALF_BUTTON_WIDTH, 
-                 WINDOW_HEIGHT * 2/5, 
-                 BUTTON_WIDTH, 
-                 BUTTON_HEIGHT, 
-                 int(WINDOW_HEIGHT * 0.05),
-                 font='fonts/sonic-advance-2-regular.ttf')
-
-button3.set_border_color(Color('white'))
-button3.set_fill_color(Color('black'))
-button3.set_text('Resume', Color('white'))
-
-button4 = Button(WINDOWN_HALF_WIDTH / 2 - HALF_BUTTON_WIDTH, 
-                 WINDOW_HEIGHT * 3/5, 
-                 BUTTON_WIDTH, 
-                 BUTTON_HEIGHT, 
-                 int(WINDOW_HEIGHT * 0.05),
-                 font='fonts/sonic-advance-2-regular.ttf')
-
-button4.set_border_color(Color('white'))
-button4.set_fill_color(Color('black'))
-button4.set_text('Settings', Color('white'))
-
-button5 = Button(WINDOWN_HALF_WIDTH / 2 - HALF_BUTTON_WIDTH, 
-                 WINDOW_HEIGHT * 4/5, 
-                 BUTTON_WIDTH, 
-                 BUTTON_HEIGHT, 
-                 int(WINDOW_HEIGHT * 0.05),
-                 font='fonts/sonic-advance-2-regular.ttf')
-
-button5.set_border_color(Color('white'))
-button5.set_fill_color(Color('black'))
-button5.set_text('Quit', Color('white'))
+            exit()
 
 class Pause:
     def __init__(self, display, gameStateManager):
+        pygame.init()
         self.display = display
         self.gameStateManager = gameStateManager
-        self.buttons = [button3, button4, button5]
+        self.button_heights = [WINDOW_HEIGHT * 2/5, WINDOW_HEIGHT * 3/5, WINDOW_HEIGHT * 4/5]
+        self.button_texts = ['Resume', 'Settings', 'Quit']
+
+        self.buttons = generateButtons(self.button_heights, self.button_texts)
+
+        self.button3 = self.buttons[0]
+        self.button4 = self.buttons[1]
+        self.button5 = self.buttons[2]
     
     def run(self, events):
         font = pygame.font.Font('fonts/sonic-advance-2-regular.ttf', int(WINDOW_HEIGHT * 0.025))
@@ -100,19 +75,21 @@ class Pause:
         for button in self.buttons:
             button.update_buttons(self.display, events)
         
-        if button3.clicked:
+        if self.button3.clicked:
             self.gameStateManager.set_state('level')
-            button3.button_clicked()
+            self.button3.button_clicked()
         
-        if button4.clicked:
+        if self.button4.clicked:
             self.gameStateManager.set_state('settings')
-            button4.button_clicked()
+            self.button4.button_clicked()
         
-        if button5.clicked:
+        if self.button5.clicked:
             pygame.quit()
+            exit()
 
 class Setting:
     def __init__(self, display, gameStateManager):
+        pygame.init()
         self.display = display
         self.gameStateManager = gameStateManager
     

@@ -89,11 +89,8 @@ class Button():
     def adjust_fill_color(self, amount):
         if amount > 0:
             self.fill_color = tuple(min(255, x + amount) for x in self.fill_color)
-            # cursor = pygame.cursors.compile(pygame.cursors.textmarker_strings)
-            # pygame.mouse.set_cursor((16, 16), (0, 0), *cursor)
         else:
             self.fill_color = tuple(max(0, x + amount) if x != 255 else 255 for x in self.fill_color)
-            # pygame.mouse.set_cursor(*pygame.cursors.arrow)
 
     def update_buttons(self, display, events):
         mouse_pos = pygame.mouse.get_pos()
@@ -102,4 +99,3 @@ class Button():
         for event in events:
             if event != None and self.on and event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                 self.button_clicked()
-                # print(self.clicked)
