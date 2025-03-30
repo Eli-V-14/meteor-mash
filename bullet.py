@@ -9,9 +9,12 @@ class Bullet:
         self.x, self.y = spaceship.x, spaceship.y
         self.img_width = spaceship.img.get_width() / 2
         self.img_height = spaceship.img.get_height() / 2
-        self.width = 6
-        self.height = 6
+        self.width = 4
+        self.height = 4
+        
         self.angle = spaceship.angle
+
+        # self.angle = spaceship.angle
         self.cosine = spaceship.cosine
         self.sine = spaceship.sine
         self.xv = self.cosine * 2.5
@@ -24,10 +27,8 @@ class Bullet:
     def draw(self, display):
         pygame.draw.rect(display, Color('royalblue1'), [self.x - self.img_width, self.y - self.img_height, self.width, self.height])
     
-    def update(self):
-        print(0, WINDOW_HALF_WIDTH)
-        print(0, WINDOW_HALF_HEIGHT)
-        print(self.x, self.y)
+    
+    def update(self, events=None):
         self.move()
         self.draw(self.display)
     

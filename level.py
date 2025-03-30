@@ -25,6 +25,12 @@ class Level:
                     self.gameStateManager.set_state('pause')
                 elif event.key == pygame.K_SPACE:
                     self.bullets.append(Bullet(self.display, self.spaceship))
+                    
+        
+        # keys = pygame.key.get_pressed()
+
+        # if keys[pygame.K_SPACE]:
+        #     self.bullets.append(Bullet(self.display, self.spaceship))
         
         for bullet in self.bullets:
             bullet.update()
