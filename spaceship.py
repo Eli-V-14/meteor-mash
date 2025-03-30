@@ -4,9 +4,8 @@ import pygame
 import math
 
 class Spaceship:
-    def __init__(self, display, delta_time):
+    def __init__(self, display):
         self.display = display
-        self.delta_time = delta_time
 
         self.img = pygame.image.load('images/spaceship1.png').convert_alpha()
         self.img = pygame.transform.scale(self.img, (91, 91))
@@ -28,22 +27,22 @@ class Spaceship:
     def draw(self, img, rect):
         self.display.blit(img, rect)
 
-    def update(self):
+    def update(self, delta_time):
         keys = pygame.key.get_pressed()
 
         img = self.img
 
         if keys[pygame.K_RIGHT]:
-            self.angle -= 1
+            self.angle -= 5
         elif keys[pygame.K_LEFT]:
-            self.angle += 1
+            self.angle += 5
         
         self.cosine = math.cos(math.radians((self.get_angle()) + 90))
         self.sine = math.sin(math.radians((self.get_angle()) - 90))
         
         if keys[pygame.K_w]:
-            self.x += self.cosine * self.delta_time * 35
-            self.y += self.sine * self.delta_time * 35
+            self.x += self.cosine * 450 * delta_time
+            self.y += self.sine * 450 * delta_time
             img = pygame.image.load('images/spaceship2.png')
             img = pygame.transform.scale(img, (91, 91))
         else:

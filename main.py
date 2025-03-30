@@ -12,15 +12,15 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.screen = pygame.display.set_mode((WINDOW_HALF_WIDTH, WINDOW_HEIGHT))
-        self.delta_time = self.clock.tick(60) / 1000
+        # self.delta_time = self.clock.tick(60) / 1000
 
         pygame.display.flip()
 
         self.gameStartManager = GameStateManager('start')
-        self.start = Start(self.screen, self.gameStartManager, self.delta_time)
-        self.level = Level(self.screen, self.gameStartManager, self.delta_time)
-        self.pause = Pause(self.screen, self.gameStartManager, self.delta_time)
-        self.settings = Setting(self.screen, self.gameStartManager, self.delta_time)
+        self.start = Start(self.screen, self.gameStartManager)
+        self.level = Level(self.screen, self.gameStartManager)
+        self.pause = Pause(self.screen, self.gameStartManager)
+        self.settings = Setting(self.screen, self.gameStartManager)
 
         self.states = {'start':self.start,
                        'level':self.level,
@@ -36,8 +36,10 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
+
+            self.delta_time = self.clock.tick(60) / 1000
             
-            self.states[self.gameStartManager.get_state()].run(events)
+            self.states[self.gameStartManager.get_state()].run(events, self.delta_time)
 
             fps = self.clock.get_fps()
 
@@ -45,7 +47,7 @@ class Game:
 
             pygame.display.update()
 
-            # self.delta_time = self.clock.tick(60)
+            
     
 if __name__ == '__main__':
     # print(pygame.font.get_fonts())

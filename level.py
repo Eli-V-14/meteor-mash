@@ -7,18 +7,18 @@ import pygame
 import random
 
 class Level:
-    def __init__(self, display, gameStateManager, delta_time):
+    def __init__(self, display, gameStateManager):
         pygame.init()
         self.display = display
         self.gameStateManager = gameStateManager
-        self.delta_time = delta_time
-        self.spaceship = Spaceship(self.display, delta_time)
+        self.spaceship = Spaceship(self.display)
         self.bullets = []
         self.asteroids = []
         self.count = 0
     
-    def run(self, events):
+    def run(self, events, delta_time):
         self.count += 1
+
         font = pygame.font.Font('fonts/sonic-advance-2-regular.ttf', int(WINDOW_HEIGHT * 0.025))
         text = font.render('Meteor Mash: Game', True, Color('white'))
 
@@ -30,36 +30,39 @@ class Level:
                 if event.key == pygame.K_ESCAPE:
                     self.gameStateManager.set_state('pause')
                 elif event.key == pygame.K_SPACE:
-                    self.bullets.append(Bullet(self.display, self.spaceship, self.delta_time))
-        
-        # print(self.count)
+                    self.bullets.append(Bullet(self.display, self.spaceship))
 
-        if self.count % 500 == 0:
+        if self.count % 50 == 0:
             rank = random.choice([1, 1, 1, 2, 2, 3])
-            self.asteroids.append(Asteroid(self.display, rank, self.delta_time))
+            self.asteroids.append(Asteroid(self.display, rank))
         
         # keys = pygame.key.get_pressed()
         # if keys[pygame.K_SPACE]:
         #     self.bullets.append(Bullet(self.display, self.spaceship))
 
         for a in self.asteroids:
-            a.update()
+            a.update(delta_time)
             for b in self.bullets:
-                b.update()
+                b.update(delta_time)
 
-                if (a.x < b.x + b.width and a.x + a.width/2 > b.x and
-                    a.y < b.y + b.height and a.y + a.height/2 > b.y):
+                asteroid_rect = pygame.Rect(a.x, a.y, a.width, a.height)
+                bullet_rect = pygame.Rect(b.x - b.img_width - b.width / 4, b.y - b.img_height, b.width, b.height)
+
+                pygame.draw.rect(self.display, Color('red'), asteroid_rect, 2)
+                pygame.draw.rect(self.display, Color('blue'), bullet_rect, 2)
+
+                if asteroid_rect.colliderect(bullet_rect):
                     if a.rank == 3:
-                        n_a1 = Asteroid(self.display, 2, self.delta_time)
+                        n_a1 = Asteroid(self.display, 2)
                         n_a1.x, n_a1.y = a.x, a.y
-                        n_a2 = Asteroid(self.display, 2, self.delta_time)
+                        n_a2 = Asteroid(self.display, 2)
                         n_a2.x, n_a2.y = a.x, a.y
                         self.asteroids.append(n_a1)
                         self.asteroids.append(n_a2)
                     elif a.rank == 2:
-                        n_a1 = Asteroid(self.display, 1, self.delta_time)
+                        n_a1 = Asteroid(self.display, 1)
                         n_a1.x, n_a1.y = a.x, a.y
-                        n_a2 = Asteroid(self.display, 1, self.delta_time)
+                        n_a2 = Asteroid(self.display, 1)
                         n_a2.x, n_a2.y = a.x, a.y
                         self.asteroids.append(n_a1)
                         self.asteroids.append(n_a2)
@@ -71,11 +74,7 @@ class Level:
             if not a.on_screen():
                 self.asteroids.remove(a)
                 
-                
-            
-            
-        
-        self.spaceship.update()
+        self.spaceship.update(delta_time)
                 
                 
 

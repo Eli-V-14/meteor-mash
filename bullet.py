@@ -4,9 +4,8 @@ import pygame
 import math
 
 class Bullet:
-    def __init__(self, display, spaceship, delta_time):
+    def __init__(self, display, spaceship):
         self.display = display
-        self.delta_time = delta_time
 
         self.x, self.y = spaceship.x, spaceship.y
         self.img_width = spaceship.img.get_width() / 2
@@ -16,18 +15,20 @@ class Bullet:
 
         self.cosine = spaceship.cosine
         self.sine = spaceship.sine
-        self.xv = self.cosine * 40 * delta_time
-        self.yv = -self.sine * 40 * delta_time
+        self.xv = self.cosine * 450
+        self.yv = -self.sine * 450
+
+        self.count = 0
     
-    def move(self):
-        self.x += self.xv
-        self.y -= self.yv
+    def move(self, delta_time):
+        self.x += self.xv * delta_time
+        self.y -= self.yv * delta_time
     
-    def draw(self, display):
-        pygame.draw.rect(display, Color('royalblue1'), [self.x - self.img_width - self.width / 2, self.y - self.img_height, self.width, self.height])
+    def draw(self, display):        
+        pygame.draw.rect(display, Color('royalblue1'), [self.x - self.img_width - self.width / 4, self.y - self.img_height, self.width, self.height])
     
-    def update(self):
-        self.move()
+    def update(self, delta_time):
+        self.move(delta_time)
         self.draw(self.display)
     
     def on_screen(self):

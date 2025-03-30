@@ -20,11 +20,10 @@ def generateButtons(heights, texts):
     return buttons
 
 class Start:
-    def __init__(self, display, gameStateManager, delta_time):
+    def __init__(self, display, gameStateManager):
         pygame.init()
         self.display = display
         self.gameStateManager = gameStateManager
-        self.delta_time = delta_time
 
         self.button_heights = [WINDOW_HALF_HEIGHT + HALF_BUTTON_HEIGHT, WINDOW_HALF_HEIGHT + BUTTON_HEIGHT * 1.75]
         self.button_texts = ['Play', 'Quit']
@@ -34,7 +33,8 @@ class Start:
         self.button1 = self.buttons[0]
         self.button2 = self.buttons[1]
 
-    def run(self, events):
+    def run(self, events, delta_time):
+        self.delta_time = delta_time
         font = pygame.font.Font('fonts/sonic-advance-2-regular.ttf', int(WINDOW_HEIGHT * 0.1))
         text = font.render('Meteor Mash', True, Color('white'))
         rect = text.get_rect()
@@ -54,11 +54,10 @@ class Start:
             exit()
 
 class Pause:
-    def __init__(self, display, gameStateManager, delta_time):
+    def __init__(self, display, gameStateManager):
         pygame.init()
         self.display = display
         self.gameStateManager = gameStateManager
-        self.delta_time = delta_time
 
         self.button_heights = [WINDOW_HEIGHT * 2/5, WINDOW_HEIGHT * 3/5, WINDOW_HEIGHT * 4/5]
         self.button_texts = ['Resume', 'Settings', 'Quit']
@@ -69,7 +68,8 @@ class Pause:
         self.button4 = self.buttons[1]
         self.button5 = self.buttons[2]
     
-    def run(self, events):
+    def run(self, events, delta_time):
+        self.delta_time = delta_time
         font = pygame.font.Font('fonts/sonic-advance-2-regular.ttf', int(WINDOW_HEIGHT * 0.025))
         text = font.render('Meteor Mash: Pause Menu', True, Color('white'))
 
@@ -92,13 +92,13 @@ class Pause:
             exit()
 
 class Setting:
-    def __init__(self, display, gameStateManager, delta_time):
+    def __init__(self, display, gameStateManager):
         pygame.init()
         self.display = display
         self.gameStateManager = gameStateManager
-        self.delta_time = delta_time
     
-    def run(self, events):
+    def run(self, events, delta_time):
+        self.delta_time = delta_time
         font = pygame.font.Font('fonts/sonic-advance-2-regular.ttf', int(WINDOW_HEIGHT * 0.025))
         text = font.render('Meteor Mash: Settings', True, Color('white'))
 
