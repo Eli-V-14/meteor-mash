@@ -20,10 +20,12 @@ def generateButtons(heights, texts):
     return buttons
 
 class Start:
-    def __init__(self, display, gameStateManager):
+    def __init__(self, display, gameStateManager, delta_time):
         pygame.init()
         self.display = display
         self.gameStateManager = gameStateManager
+        self.delta_time = delta_time
+
         self.button_heights = [WINDOW_HALF_HEIGHT + HALF_BUTTON_HEIGHT, WINDOW_HALF_HEIGHT + BUTTON_HEIGHT * 1.75]
         self.button_texts = ['Play', 'Quit']
 
@@ -52,10 +54,12 @@ class Start:
             exit()
 
 class Pause:
-    def __init__(self, display, gameStateManager):
+    def __init__(self, display, gameStateManager, delta_time):
         pygame.init()
         self.display = display
         self.gameStateManager = gameStateManager
+        self.delta_time = delta_time
+
         self.button_heights = [WINDOW_HEIGHT * 2/5, WINDOW_HEIGHT * 3/5, WINDOW_HEIGHT * 4/5]
         self.button_texts = ['Resume', 'Settings', 'Quit']
 
@@ -88,10 +92,11 @@ class Pause:
             exit()
 
 class Setting:
-    def __init__(self, display, gameStateManager):
+    def __init__(self, display, gameStateManager, delta_time):
         pygame.init()
         self.display = display
         self.gameStateManager = gameStateManager
+        self.delta_time = delta_time
     
     def run(self, events):
         font = pygame.font.Font('fonts/sonic-advance-2-regular.ttf', int(WINDOW_HEIGHT * 0.025))

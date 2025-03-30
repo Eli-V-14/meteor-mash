@@ -4,8 +4,10 @@ import pygame
 import math
 
 class Spaceship:
-    def __init__(self, display):
+    def __init__(self, display, delta_time):
         self.display = display
+        self.delta_time = delta_time
+
         self.img = pygame.image.load('images/spaceship1.png').convert_alpha()
         self.img = pygame.transform.scale(self.img, (91, 91))
         # self.img.set_colorkey(Color('blue'))
@@ -17,7 +19,6 @@ class Spaceship:
         self.cosine = 0
         self.sine = 0
 
-        self.speed = 1
         self.acceleration = 2
         self.top = -self.img.get_height() / 2
         self.bottom = WINDOW_HEIGHT + self.img.get_height() / 2
@@ -27,23 +28,22 @@ class Spaceship:
     def draw(self, img, rect):
         self.display.blit(img, rect)
 
-    def update(self, events):
-
+    def update(self):
         keys = pygame.key.get_pressed()
 
         img = self.img
 
         if keys[pygame.K_RIGHT]:
-            self.angle -= 0.55
+            self.angle -= 1
         elif keys[pygame.K_LEFT]:
-            self.angle += 0.55
+            self.angle += 1
         
-        self.cosine = math.cos(math.radians((self.get_angle() % 360) + 90))
-        self.sine = math.sin(math.radians((self.get_angle() % 360) - 90))
+        self.cosine = math.cos(math.radians((self.get_angle()) + 90))
+        self.sine = math.sin(math.radians((self.get_angle()) - 90))
         
         if keys[pygame.K_w]:
-            self.x += self.cosine * self.speed
-            self.y += self.sine * self.speed
+            self.x += self.cosine * self.delta_time * 35
+            self.y += self.sine * self.delta_time * 35
             img = pygame.image.load('images/spaceship2.png')
             img = pygame.transform.scale(img, (91, 91))
         else:
@@ -67,11 +67,6 @@ class Spaceship:
         scaled_rect = self.img.get_rect(center = (self.x - rot_img.get_width() / 2, self.y - rot_img.get_height() / 2))
 
         self.draw(rot_img, scaled_rect)
-        
-        for event in events:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    pass
     
     def get_angle(self):
         return self.angle
