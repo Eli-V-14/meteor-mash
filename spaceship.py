@@ -13,7 +13,9 @@ class Spaceship:
         # self.scaled_img = pygame.transform.scale(self.img, (100, 100))
         self.angle = 0
         self.x = WINDOW_HALF_WIDTH / 2 + self.img.get_width() / 2
-        self.y = WINDOW_HALF_HEIGHT  + self.img.get_width() / 2
+        self.y = WINDOW_HALF_HEIGHT  + self.img.get_height() / 2
+        self.width = self.img.get_width()
+        self.height = self.img.get_height()
 
         self.cosine = 0
         self.sine = 0
@@ -41,8 +43,8 @@ class Spaceship:
         self.sine = math.sin(math.radians((self.get_angle()) - 90))
         
         if keys[pygame.K_w]:
-            self.x += self.cosine * 450 * delta_time
-            self.y += self.sine * 450 * delta_time
+            self.x += self.cosine * 250 * delta_time
+            self.y += self.sine * 250 * delta_time
             img = pygame.image.load('images/spaceship2.png')
             img = pygame.transform.scale(img, (91, 91))
         else:

@@ -1,4 +1,5 @@
 from settings import *
+from level import Level
 from pygame import Color
 from button import Button
 import pygame
@@ -109,3 +110,38 @@ class Setting:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.gameStateManager.set_state('pause')
+class Lost:
+    def __init__(self, display, gameStateManager, level):
+        pygame.init()
+        self.display = display
+        self.gameStateManager = gameStateManager
+        self.level = level
+
+        self.button_heights = [WINDOW_HEIGHT * 3/5, WINDOW_HEIGHT * 4/5]
+        self.button_texts = ['Play Again', 'Quit']
+
+        self.buttons = generateButtons(self.button_heights, self.button_texts)
+
+        self.button6 = self.buttons[0]
+        self.button7 = self.buttons[1]
+    
+    def run(self, events, delta_time):
+        font = pygame.font.Font('fonts/sonic-advance-2-regular.ttf', int(WINDOW_HEIGHT * 0.10))
+        text = font.render('GAME OVER', True, Color('white'))
+        text_rect = text.get_rect()
+
+        self.display.fill(Color('black'))
+        self.display.blit(text, (WINDOW_HALF_WIDTH / 2 - text_rect.centerx, WINDOW_HEIGHT * 2/5))
+
+        for button in self.buttons:
+            button.update_buttons(self.display, events)
+
+        if self.button6.clicked:
+            # print('Still being worked on')
+            self.level.restart(self.gameStateManager)
+            self.gameStateManager.set_state('level')
+            self.button6.button_clicked()
+        
+        if self.button7.clicked:
+            pygame.quit()
+            exit()
