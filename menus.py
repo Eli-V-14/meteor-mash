@@ -1,24 +1,7 @@
 from settings import *
-from level import Level
 from pygame import Color
 from button import Button
 import pygame
-
-def generateButtons(heights, texts):
-    buttons = []
-    for i in range(len(heights)):
-        button = Button(WINDOW_HALF_WIDTH / 2 - HALF_BUTTON_WIDTH, 
-                 heights[i], 
-                 BUTTON_WIDTH, 
-                 BUTTON_HEIGHT, 
-                 int(WINDOW_HEIGHT * 0.05),
-                 font='fonts/sonic-advance-2-regular.ttf')
-
-        button.set_border_color(Color('white'))
-        button.set_fill_color(Color('black'))
-        button.set_text(texts[i], Color('white'))
-        buttons.append(button)
-    return buttons
 
 class Start:
     def __init__(self, display, gameStateManager):
@@ -53,6 +36,7 @@ class Start:
         if self.button2.clicked:
             pygame.quit()
             exit()
+
 
 class Pause:
     def __init__(self, display, gameStateManager):
@@ -92,6 +76,7 @@ class Pause:
             pygame.quit()
             exit()
 
+
 class Setting:
     def __init__(self, display, gameStateManager):
         pygame.init()
@@ -110,6 +95,8 @@ class Setting:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.gameStateManager.set_state('pause')
+
+
 class Lost:
     def __init__(self, display, gameStateManager, level):
         pygame.init()
@@ -117,7 +104,7 @@ class Lost:
         self.gameStateManager = gameStateManager
         self.level = level
 
-        self.button_heights = [WINDOW_HEIGHT * 3/5, WINDOW_HEIGHT * 4/5]
+        self.button_heights = [WINDOW_HEIGHT * 2/5, WINDOW_HEIGHT * 3/5]
         self.button_texts = ['Play Again', 'Quit']
 
         self.buttons = generateButtons(self.button_heights, self.button_texts)
@@ -131,7 +118,7 @@ class Lost:
         text_rect = text.get_rect()
 
         self.display.fill(Color('black'))
-        self.display.blit(text, (WINDOW_HALF_WIDTH / 2 - text_rect.centerx, WINDOW_HEIGHT * 2/5))
+        self.display.blit(text, (WINDOW_HALF_WIDTH / 2 - text_rect.centerx, WINDOW_HEIGHT * 1/5))
 
         for button in self.buttons:
             button.update_buttons(self.display, events)
@@ -145,3 +132,19 @@ class Lost:
         if self.button7.clicked:
             pygame.quit()
             exit()
+
+def generateButtons(heights, texts):
+    buttons = []
+    for i in range(len(heights)):
+        button = Button(WINDOW_HALF_WIDTH / 2 - HALF_BUTTON_WIDTH, 
+                 heights[i], 
+                 BUTTON_WIDTH, 
+                 BUTTON_HEIGHT, 
+                 int(WINDOW_HEIGHT * 0.05),
+                 font='fonts/sonic-advance-2-regular.ttf')
+
+        button.set_border_color(Color('white'))
+        button.set_fill_color(Color('black'))
+        button.set_text(texts[i], Color('white'))
+        buttons.append(button)
+    return buttons

@@ -17,6 +17,7 @@ class Game:
 
         self.gameStartManager = GameStateManager('start')
         self.start = Start(self.screen, self.gameStartManager)
+        # self.start.run()
         self.level = Level(self.screen, self.gameStartManager)
         self.pause = Pause(self.screen, self.gameStartManager)
         self.settings = Setting(self.screen, self.gameStartManager)
@@ -33,8 +34,11 @@ class Game:
             events = pygame.event.get()
             for event in events:
                 if event.type == pygame.QUIT:
-                    pygame.quit()
+                    pygame.quit() 
                     exit()
+
+            if self.gameStartManager.get_state() == 'start':
+                self.start.button1.button_clicked()
 
             self.delta_time = self.clock.tick(60) / 1000
             self.states[self.gameStartManager.get_state()].run(events, self.delta_time)
@@ -43,8 +47,6 @@ class Game:
 
             pygame.display.set_caption(f"FPS: {fps:.2f}")
             pygame.display.update()
-
-            
     
 if __name__ == '__main__':
     # print(pygame.font.get_fonts())
