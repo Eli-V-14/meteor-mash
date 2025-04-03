@@ -20,6 +20,8 @@ class Level:
         self.last_bullet_frame = 0
         self.total_frames = 0
 
+        self.reward = 0
+
         self.terminated = False
 
     def step(self, action):
@@ -41,7 +43,7 @@ class Level:
             case 3: 
                 if (self.total_frames - self.last_bullet_frame) > 10:
                     self.shoot()
-                self.last_bullet_frame = self.total_frames
+                    self.last_bullet_frame = self.total_frames
             case 4:
                 pass
             case _:
@@ -50,24 +52,49 @@ class Level:
 
         terminated = self.terminated
         truncated = False
-        reward = self.get_reward
-        # observation = self._get_obs()
-        # info = self._get_info()        
+        reward = self.get_rewards()
+        observation = self._get_obs()
+        info = self._get_info()        
 
-        # return observation, reward, terminated, truncated, info
+        return observation, reward, terminated, truncated, info
 
     def shoot(self):
         self.bullets.append(self.spaceship.shoot())
     
-    def get_reward():
-        pass
-    
+    def get_rewards(self):
+        reward = 0  
+        reward += 0.05  
+
+        if self.spaceship.xv > 0 or self.spaceship.yv > 0:
+            reward += 0.1  
+
+        for a in self.asteroids:
+            dist = ((self.spaceship.x - a.x) ** 2 + (self.spaceship.y - a.y) ** 2) ** 0.5
+            if 50 < dist < 100:
+                reward += 1  
+
+        reward += self.reward
+        self.reward = 0  
+
+        return reward
+
     def _get_obs(self):
-        pass
+        asteroids_state = [[a.x / WINDOW_HALF_WIDTH, a.y / WINDOW_HEIGHT
+                            , a.rank, a.xv, a.yv] for a in self.asteroids]
+        
+        bullets_state = [[b.x / WINDOW_HALF_WIDTH, b.y / WINDOW_HEIGHT
+                          , b.xv, b.yv] for b in self.bullets]
+
+        return {'spaceship_pos':(self.spaceship.x / WINDOW_HALF_WIDTH, self.spaceship.y / WINDOW_HEIGHT), 
+                'spaceship_rot':(self.spaceship.angle%360) / 360,
+                'asteroids':asteroids_state, 
+                'bullets':bullets_state}
 
     def _get_info(self):
-        pass
+        asteroid_sizes = [[a.width, a.height] for a in self.asteroids]
 
+        return {'remaining_asteroids':len(self.asteroids),
+                'asteroid_sizes': asteroid_sizes}
     
     def run(self, events, delta_time):
         self.count += 1
@@ -98,7 +125,7 @@ class Level:
             b.update(delta_time)
 
         self.check_collisions(delta_time)
-                
+        
         self.spaceship.update(delta_time)
     
     def render_text(self):
@@ -129,6 +156,9 @@ class Level:
                                      self.spaceship.width, self.spaceship.height)
         # pygame.draw.rect(self.display, Color('green'), spaceship_rect, 2)
 
+        bullets_to_remove = []
+        asteroids_to_remove = []
+
         for a in self.asteroids:
             asteroid_rect = pygame.Rect(a.x, a.y, a.width, a.height)
             # pygame.draw.rect(self.display, Color('red'), asteroid_rect, 2)
@@ -142,15 +172,26 @@ class Level:
                 # pygame.draw.rect(self.display, Color('blue'), bullet_rect, 2)
 
                 if asteroid_rect.colliderect(bullet_rect):
+                    self.reward += 50
                     if a.rank == 3:
                         self.split_asteroids(a, a.rank)
-                    self.score += 50 * a.rank
-                    self.asteroids.remove(a)
-                    self.bullets.remove(b)
+                        self.score += 150
+                        self.reward += 100
+                    elif a.rank == 2:
+                        self.split_asteroids(a, a.rank)
+                        self.score += 75
+                        self.reward += 50
+                    self.score += 50
+                    self.reward += 25
+                    bullets_to_remove.append(b)
+                    asteroids_to_remove.append(a)
 
-                if not b.on_screen():
-                    self.bullets.remove(b)
-            if not a.on_screen():
+        for b in bullets_to_remove:
+            if b in self.bullets:
+                self.bullets.remove(b)
+
+        for a in asteroids_to_remove:
+            if a in self.asteroids:
                 self.asteroids.remove(a)
 
     def restart(self):
@@ -160,8 +201,6 @@ class Level:
         self.spaceship = Spaceship(self.display)
         self.count = 0
         self.score = 0
+        self.terminated = False
 
-        observation = self._get_obs()
-        info = self._get_info()
-
-        return observation, info
+        return self._get_obs(), self._get_info()

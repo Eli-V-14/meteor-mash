@@ -125,7 +125,7 @@ class Lost:
 
         if self.button6.clicked:
             # print('Still being worked on')
-            self.level.restart(self.gameStateManager)
+            self.level.restart()
             self.gameStateManager.set_state('level')
             self.button6.button_clicked()
         

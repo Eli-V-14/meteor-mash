@@ -38,16 +38,18 @@ class Spaceship:
 
         img = self.img
 
-        if keys[pygame.K_RIGHT]:
-            self.move_right()
-        elif keys[pygame.K_LEFT]:
-            self.move_left()
+        # COMMENTED OUT FOR THE USE OF THE DEEP Q-LEARNING NETWORK
+        # if keys[pygame.K_RIGHT]:
+        #     self.move_right()
+        # elif keys[pygame.K_LEFT]:
+        #     self.move_left()
         
         self.cosine = math.cos(math.radians((self.get_angle()) + 90))
         self.sine = math.sin(math.radians((self.get_angle()) - 90))
         
         if keys[pygame.K_w]:
-            self.move_forward()
+            # COMMENTED OUT FOR THE USE OF THE DEEP Q-LEARNING NETWORK
+            # self.move_forward()
             img = pygame.image.load('images/spaceship2.png')
             img = pygame.transform.scale(img, (91, 91))
         else:
@@ -55,6 +57,7 @@ class Spaceship:
 
         self.check_borders()
 
+        # COMMENTED OUT FOR THE USE OF KEYBOARD INPUTS INSTEAD OF MOUSE LOCATION
         # x_dist = pos[0] - self.x
         # y_dist = -(pos[1] - self.y)
         # angle = math.degrees(math.atan2(y_dist, x_dist))

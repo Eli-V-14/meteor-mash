@@ -8,3 +8,7 @@ class AsteroidEnv(gym.Env):
     def __init__(self):
         super(AsteroidEnv, self).__init__()
         self.game = Game()
+
+        self.action_space = spaces.Discrete(5)
+
+        self.observation_space = spaces.Dict{}
