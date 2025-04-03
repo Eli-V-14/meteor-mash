@@ -63,7 +63,7 @@ class Game:
             pygame.display.set_caption(f"FPS: {fps:.2f}")
             pygame.display.update()
 
-            return observation, reward, terminated, truncated, info
+            # return observation, reward, terminated, truncated, info 
 
 def main():
     """ Main loop for running the game manually """
@@ -72,9 +72,9 @@ def main():
     while game.running:
         obs, reward, terminated, truncated, info = game.step()
 
-        if terminated:
-            game.level.restart()
-            
+        # if terminated:
+        #     game.level.restart()
+
 if __name__ == '__main__':
     # print(pygame.font.get_fonts())
     game = Game()

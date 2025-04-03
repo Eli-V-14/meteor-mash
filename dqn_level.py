@@ -65,8 +65,8 @@ class Level:
         reward = 0  
         reward += 0.05  
 
-        if self.spaceship.xv > 0 or self.spaceship.yv > 0:
-            reward += 0.1  
+        # if self.spaceship.xv > 0 or self.spaceship.yv > 0:
+        #     reward += 0.1  
 
         for a in self.asteroids:
             dist = ((self.spaceship.x - a.x) ** 2 + (self.spaceship.y - a.y) ** 2) ** 0.5
@@ -125,7 +125,7 @@ class Level:
             b.update(delta_time)
 
         self.check_collisions(delta_time)
-        
+
         self.spaceship.update(delta_time)
     
     def render_text(self):
@@ -154,14 +154,14 @@ class Level:
     def check_collisions(self, delta_time):
         spaceship_rect = pygame.Rect(self.spaceship.x - self.spaceship.width, self.spaceship.y - self.spaceship.height, 
                                      self.spaceship.width, self.spaceship.height)
-        # pygame.draw.rect(self.display, Color('green'), spaceship_rect, 2)
+        pygame.draw.rect(self.display, Color('green'), spaceship_rect, 2)
 
-        bullets_to_remove = []
-        asteroids_to_remove = []
+        # bullets_to_remove = []
+        # asteroids_to_remove = []
 
         for a in self.asteroids:
             asteroid_rect = pygame.Rect(a.x, a.y, a.width, a.height)
-            # pygame.draw.rect(self.display, Color('red'), asteroid_rect, 2)
+            pygame.draw.rect(self.display, Color('red'), asteroid_rect, 2)
 
             if spaceship_rect.colliderect(asteroid_rect):
                 self.terminated = True
@@ -169,30 +169,33 @@ class Level:
 
             for b in self.bullets:
                 bullet_rect = pygame.Rect(b.x - b.img_width - b.width / 4, b.y - b.img_height, b.width, b.height)
-                # pygame.draw.rect(self.display, Color('blue'), bullet_rect, 2)
+                pygame.draw.rect(self.display, Color('blue'), bullet_rect, 2)
 
                 if asteroid_rect.colliderect(bullet_rect):
-                    self.reward += 50
-                    if a.rank == 3:
+                    self.reward += 50                    
+                    if a.rank > 1:
                         self.split_asteroids(a, a.rank)
-                        self.score += 150
-                        self.reward += 100
-                    elif a.rank == 2:
-                        self.split_asteroids(a, a.rank)
-                        self.score += 75
-                        self.reward += 50
+                        self.score += 50 * a.rank
+                        self.reward += 25 * a.rank
+
                     self.score += 50
                     self.reward += 25
-                    bullets_to_remove.append(b)
-                    asteroids_to_remove.append(a)
+                    # bullets_to_remove.append(b)
+                    # asteroids_to_remove.append(a)
+                    self.asteroids.remove(a)
+                    self.bullets.remove(b)
 
-        for b in bullets_to_remove:
-            if b in self.bullets:
-                self.bullets.remove(b)
-
-        for a in asteroids_to_remove:
-            if a in self.asteroids:
+                if not b.on_screen():
+                    self.bullets.remove(b)
+            if not a.on_screen():
                 self.asteroids.remove(a)
+        # for b in bullets_to_remove:
+        #     if b in self.bullets:
+        #         self.bullets.remove(b)
+
+        # for a in asteroids_to_remove:
+        #     if a in self.asteroids:
+        #         self.asteroids.remove(a)
 
     def restart(self):
         self.gameStateManager = self.gameStateManager

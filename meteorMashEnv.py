@@ -4,9 +4,9 @@ import numpy as np
 import pygame
 from dqn_main import Game
 
-class AsteroidEnv(gym.Env):
+class MeteorMashEnv(gym.Env):
     def __init__(self):
-        super(AsteroidEnv, self).__init__()
+        super(MeteorMashEnv, self).__init__()
         self.game = Game()
 
         self.action_space = spaces.Discrete(5)
@@ -18,11 +18,26 @@ class AsteroidEnv(gym.Env):
             "bullets": spaces.Box(low=-np.inf, high=np.inf, shape=(10, 4), dtype=np.float32)
         })
     
-    def reset(self):
+    def reset(self, seed=None, options=None):
+        """ Resets the environment and returns the initial observation. """
+        super().reset(seed=seed)
+        self.current_step = 0
         obs, info = self.game.level.restart()
         return obs, info
     
     def step(self, action):
         observation, reward, terminated, truncated, info = self.game.level.step(action)
+
+        truncated = bool(truncated)
+
         return observation, reward, terminated, truncated, info
+    
+    def render(self, mode="human"):
+        """ Renders the game window. """
+        if mode == "human":
+            pygame.display.flip()
+
+    def close(self):
+        """ Cleans up pygame resources. """
+        pygame.quit()
     
