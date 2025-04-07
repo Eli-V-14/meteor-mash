@@ -35,6 +35,7 @@ class MeteorMashEnv(gym.Env):
     def render(self, mode="human"):
         """ Renders the game window. """
         if mode == "human":
+            self.game.states['level'].run([], 0)
             pygame.display.flip()
 
     def close(self):

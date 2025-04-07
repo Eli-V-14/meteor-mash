@@ -21,7 +21,7 @@ class DeepQNetwork(nn.Module):
 
     def forward(self, state):
         x = F.relu(self.fc1(state))
-        x = F.relu(self.f2(x))
+        x = F.relu(self.fc2(x))
         actions = self.fc3(x)
 
         return actions
@@ -30,7 +30,7 @@ class DQNAgent():
     def __init__(self, gamma, epsilon, lr, input_dims, batch_size, n_actions, 
                  max_mem_size=100000, eps_end=0.01, eps_dec=5e-4):
         self.gamma = gamma
-        self.epsilson = epsilon
+        self.epsilon = epsilon
         self.lr = lr
         self.input_dims = input_dims
         self.batch_size = batch_size

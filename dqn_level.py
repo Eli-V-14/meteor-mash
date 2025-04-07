@@ -99,7 +99,7 @@ class Level:
     def run(self, events, delta_time):
         self.count += 1
 
-        delta_time = delta_time if delta_time < 0.01 else 0.016
+        delta_time = delta_time if delta_time > 0.01 else 0.016
         self.render_text()
         
         # COMMENTED OUT FOR THE USE OF THE DEEP Q-LEARNING NETWORK
@@ -141,6 +141,7 @@ class Level:
 
     def generate_asteroids(self):
         rank = random.choice([1, 1, 1, 2, 2, 3])
+        # print('asteroid')
         self.asteroids.append(Asteroid(self.display, rank))
 
     def split_asteroids(self, asteroid, rank):
