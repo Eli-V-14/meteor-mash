@@ -41,7 +41,7 @@ class Level:
             case 1: self.spaceship.move_right()
             case 2: self.spaceship.move_forward()
             case 3: 
-                if (self.total_frames - self.last_bullet_frame) > 10:
+                if (self.total_frames - self.last_bullet_frame) > 50:
                     self.shoot()
                     self.last_bullet_frame = self.total_frames
             case 4:
