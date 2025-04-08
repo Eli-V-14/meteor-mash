@@ -1,8 +1,17 @@
 import gym
 from gym import spaces
+from gym import register
+
 import numpy as np
 import pygame
+
 from dqn_main import Game
+
+register(
+    id='MeteorMash-v0',
+    entry_point='meteorMashEnv:MeteorMashEnv',
+    max_episode_steps = 5000
+)
 
 class MeteorMashEnv(gym.Env):
     def __init__(self):
@@ -28,9 +37,7 @@ class MeteorMashEnv(gym.Env):
     def step(self, action):
         observation, reward, terminated, truncated, info = self.game.level.step(action)
 
-        truncated = bool(truncated)
-
-        return observation, reward, terminated, truncated, info
+        return observation, reward, bool(terminated), truncated, info
     
     def render(self, mode="human"):
         """ Renders the game window. """

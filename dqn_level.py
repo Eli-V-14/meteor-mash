@@ -22,7 +22,7 @@ class Level:
 
         self.reward = 0
 
-        self.terminated = False
+        self.terminated = bool(False)
 
     def step(self, action):
         """
@@ -50,13 +50,13 @@ class Level:
                 print(f"Invalid action: {action}")
 
 
-        terminated = self.terminated
+        terminated = bool(self.terminated)
         truncated = False
         reward = self.get_rewards()
         observation = self._get_obs()
         info = self._get_info()        
 
-        return observation, reward, terminated, truncated, info
+        return observation, reward, bool(terminated), truncated, info
 
     def shoot(self):
         self.bullets.append(self.spaceship.shoot())
@@ -165,7 +165,7 @@ class Level:
             pygame.draw.rect(self.display, Color('red'), asteroid_rect, 2)
 
             if spaceship_rect.colliderect(asteroid_rect):
-                self.terminated = True
+                self.terminated = bool(True)
                 # self.gameStateManager.set_state('lost')
 
             for b in self.bullets:
@@ -205,6 +205,6 @@ class Level:
         self.spaceship = Spaceship(self.display)
         self.count = 0
         self.score = 0
-        self.terminated = False
+        self.terminated = bool(False)
 
         return self._get_obs(), self._get_info()
