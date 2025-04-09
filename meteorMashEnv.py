@@ -23,8 +23,7 @@ class MeteorMashEnv(gym.Env):
         self.observation_space = spaces.Dict({
             "spaceship_pos": spaces.Box(low=0, high=1, shape=(2,), dtype=np.float32),
             "spaceship_rot": spaces.Box(low=0, high=1, shape=(1,), dtype=np.float32),
-            "asteroids": spaces.Box(low=-np.inf, high=np.inf, shape=(10, 5), dtype=np.float32),
-            "bullets": spaces.Box(low=-np.inf, high=np.inf, shape=(10, 4), dtype=np.float32)
+            "closest_asteroid": spaces.Box(low=-np.inf, high=np.inf, shape=(5,), dtype=np.float32)
         })
     
     def reset(self, seed=None, options=None):

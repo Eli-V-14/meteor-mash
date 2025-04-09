@@ -54,8 +54,23 @@ class DQNAgent():
 
     def store_transitions(self, state, action, reward, state_, done):
         index = self.mem_counter % self.max_mem_size
-        self.state_memory[index] = state
-        self.new_state_memory[index] = state_
+
+        flattened_state = np.concatenate([
+            np.array(state['spaceship_pos']).flatten(),
+            np.array(state['spaceship_rot']).flatten(),
+            np.array(state['closest_asteroid'])
+        ])
+
+        # print(flattened_state)
+
+        flattened_state_ = np.concatenate([
+            np.array(state_['spaceship_pos']).flatten(),
+            np.array(state_['spaceship_rot']).flatten(),
+            np.array(state_['closest_asteroid']).flatten()
+        ])
+
+        self.state_memory[index] = flattened_state
+        self.new_state_memory[index] = flattened_state_
         self.reward_memory[index] = reward
         self.action_memory[index] = action
         self.terminal_memory[index] = done
@@ -64,6 +79,11 @@ class DQNAgent():
 
     def choose_action(self, observation):
         if np.random.random() > self.epsilon:
+            observations = np.concatenate([
+                np.array(observations['spaceship_pos']).flatten(),
+                np.array(observations['spaceship_rot']).flatten(),
+                np.array(observations['closest_asteroid'])
+            ])
             state = T.tensor([observation]).to(self.Q_eval.device)
             actions = self.Q_eval.forward(state)
             action = T.argmax(actions).item()
@@ -97,5 +117,5 @@ class DQNAgent():
         loss.backward()
         self.Q_eval.optimizer.step()
 
-        self.epsilson = self.epsilson - self.eps_dec if self.epsilson > self.eps_end else self.eps_end
+        self.epsilon = self.epsilon - self.eps_dec if self.epsilon > self.eps_end else self.eps_end
 

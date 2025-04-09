@@ -79,16 +79,31 @@ class Level:
         return reward
 
     def _get_obs(self):
-        asteroids_state = [[a.x / WINDOW_HALF_WIDTH, a.y / WINDOW_HEIGHT
-                            , a.rank, a.xv, a.yv] for a in self.asteroids]
-        
-        bullets_state = [[b.x / WINDOW_HALF_WIDTH, b.y / WINDOW_HEIGHT
-                          , b.xv, b.yv] for b in self.bullets]
+        closest_asteroid = None
+        closest_distance = float('inf')
 
-        return {'spaceship_pos':(self.spaceship.x / WINDOW_HALF_WIDTH, self.spaceship.y / WINDOW_HEIGHT), 
-                'spaceship_rot':(self.spaceship.angle%360) / 360,
-                'asteroids':asteroids_state, 
-                'bullets':bullets_state}
+        for a in self.asteroids:
+            distance = ((self.spaceship.x - a.x) ** 2 + (self.spaceship.y - a.y) ** 2) ** 0.5
+            if distance < closest_distance:
+                closest_distance = distance
+                closest_asteroid = a
+
+        if closest_asteroid is None:
+            closest_asteroid_state = [0, 0, 0, 0, 0]
+        else:
+            closest_asteroid_state = [
+                closest_asteroid.x / WINDOW_HALF_WIDTH, 
+                closest_asteroid.y / WINDOW_HEIGHT, 
+                closest_asteroid.rank, 
+                closest_asteroid.xv, 
+                closest_asteroid.yv
+            ]
+        
+        return {
+            'spaceship_pos': [self.spaceship.x / WINDOW_HALF_WIDTH, self.spaceship.y / WINDOW_HEIGHT],
+            'spaceship_rot': [(self.spaceship.angle % 360) / 360],
+            'closest_asteroid': closest_asteroid_state
+        }
 
     def _get_info(self):
         asteroid_sizes = [[a.width, a.height] for a in self.asteroids]
