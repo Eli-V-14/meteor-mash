@@ -79,12 +79,12 @@ class DQNAgent():
 
     def choose_action(self, observation):
         if np.random.random() > self.epsilon:
-            observations = np.concatenate([
-                np.array(observations['spaceship_pos']).flatten(),
-                np.array(observations['spaceship_rot']).flatten(),
-                np.array(observations['closest_asteroid'])
+            observation = np.concatenate([
+                np.array(observation['spaceship_pos']).flatten(),
+                np.array(observation['spaceship_rot']).flatten(),
+                np.array(observation['closest_asteroid'])
             ])
-            state = T.tensor([observation]).to(self.Q_eval.device)
+            state = T.tensor([observation], dtype=T.float32).to(self.Q_eval.device)
             actions = self.Q_eval.forward(state)
             action = T.argmax(actions).item()
         else:

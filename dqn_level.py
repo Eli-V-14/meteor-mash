@@ -63,10 +63,7 @@ class Level:
     
     def get_rewards(self):
         reward = 0  
-        reward += 0.05  
-
-        # if self.spaceship.xv > 0 or self.spaceship.yv > 0:
-        #     reward += 0.1  
+        reward += 0.05
 
         for a in self.asteroids:
             dist = ((self.spaceship.x - a.x) ** 2 + (self.spaceship.y - a.y) ** 2) ** 0.5

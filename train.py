@@ -4,16 +4,8 @@ import torch as T
 import meteorMashEnv
 
 from model import DQNAgent
-# from meteorMashEnv import MeteorMashEnv
 
 env = gym.make('MeteorMash-v0')
-
-# spaceship_pos_dim = env.observation_space['spaceship_pos'].shape[0]
-# spaceship_rot_dim = env.observation_space['spaceship_rot'].shape[0]
-# asteroids_dim = env.observation_space['asteroids'].shape[0] * env.observation_space['asteroids'].shape[1]
-# bullets_dim = env.observation_space['bullets'].shape[0] * env.observation_space['bullets'].shape[1]
-
-# input_dims = spaceship_pos_dim + spaceship_rot_dim + asteroids_dim + bullets_dim
 
 gamma = 0.99
 epsilon = 1.0
@@ -43,10 +35,10 @@ for episode in range(n_episodes):
         action = agent.choose_action(state)
 
         next_state, reward, terminated, truncated, info = env.step(action)
+
+        env.render()
         
         total_reward += reward
-
-        print(type(bool(terminated)))
 
         agent.store_transitions(state, action, reward, next_state, bool(terminated))
 
@@ -62,5 +54,6 @@ for episode in range(n_episodes):
 
     if (episode + 1) % 100 == 0:
         T.save(agent.Q_eval.state_dict(), f"dqn_meteor_mash_{episode+1}.pth")
+        print("dqn_meteor_mash_{episode+1}.pth")
 
 env.close()
