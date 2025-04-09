@@ -3,18 +3,21 @@ A python coded version of the old arcade Asteroids game.
 Created using the idea of Object-Oriented Programming, along with the usage of
 mathematical, physical, and game-oriented concepts. 
 
-# Libraries Used For Meteor Mash
-- pygame
-- pygetwindow
-- random
+# Default Settings for Development
+- Python Version: 3.11.#
+
+# Libraries/Packages Used For Meteor Mash
+- pygame --version==2.6.1
+- pygetwindow --version==0.0.9
+- random --version==Default Version
 
 # Reinforcement Learning
 Implementing a Deep Q-Learning model to play Asteroids game.
 
-# Library Used For Deep Q-Learning
-- numpy
-- gym
-- torch
+# Library/Pacages Used For Deep Q-Learning
+- numpy --version==1.23.5
+- gym --version==0.26.2
+- torch --version==2.6.0
 
 # Creating the DQN Model:
 - Source: https://www.youtube.com/watch?v=wc-FxNENg9U
