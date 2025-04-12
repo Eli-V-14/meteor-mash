@@ -199,9 +199,11 @@ class Level:
                     self.bullets.remove(b)
 
                 if not b.on_screen():
-                    self.bullets.remove(b)
+                    if b in self.bullets:
+                        self.bullets.remove(b)
             if not a.on_screen():
-                self.asteroids.remove(a)
+                if a in self.asteroids:
+                    self.asteroids.remove(a)
         # for b in bullets_to_remove:
         #     if b in self.bullets:
         #         self.bullets.remove(b)
