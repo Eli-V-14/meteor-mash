@@ -138,6 +138,8 @@ class Level:
 
         self.check_collisions(delta_time)
 
+        self.spaceship.draw_rays(self.asteroids, 72, 2000)
+
         self.spaceship.update(delta_time)
     
     def render_text(self):
@@ -171,6 +173,7 @@ class Level:
 
         # bullets_to_remove = []
         # asteroids_to_remove = []
+        self.terminated = self.spaceship.check_borders()
 
         for a in self.asteroids:
             asteroid_rect = pygame.Rect(a.x, a.y, a.width, a.height)

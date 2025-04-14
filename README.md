@@ -38,6 +38,6 @@ Implementing a Deep Q-Learning model to play Asteroids game.
         - There is little implementation for a custom environment, I used ChatGPT 
         to help guide me through the process. Since this is my first Deep Learning
         project, I utilized ChatGPT for future references on how to set-up a custom
-        environment to train on a Deep Q-Leanring model.
+        environment to test and train on a Deep Q-Leanring model.
 
 

@@ -50,7 +50,7 @@ class DQNAgent():
 
         self.action_memory = np.zeros(self.max_mem_size, dtype=np.int32)
         self.reward_memory = np.zeros(self.max_mem_size, dtype=np.float32)
-        self.terminal_memory = np.zeros(self.max_mem_size, dtype=np.bool)
+        self.terminal_memory = np.zeros(self.max_mem_size, dtype=bool)
 
     def store_transitions(self, state, action, reward, state_, done):
         index = self.mem_counter % self.max_mem_size

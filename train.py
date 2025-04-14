@@ -9,14 +9,14 @@ env = gym.make('MeteorMash-v0')
 
 gamma = 0.99
 epsilon = 1.0
-lr = 0.0005
+lr = 0.00005
 input_dims = 8
 print(input_dims)
 batch_size = 64
 n_actions = 5
 max_mem_size = 100000
 eps_end = 0.01
-eps_dec = 5e-4
+eps_dec = 1e-3
 
 agent = DQNAgent(gamma=gamma, epsilon=epsilon, lr=lr, input_dims=(input_dims,), 
                  batch_size=batch_size, n_actions=n_actions, max_mem_size=max_mem_size,
