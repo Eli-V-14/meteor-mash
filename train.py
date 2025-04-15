@@ -10,7 +10,7 @@ env = gym.make('MeteorMash-v0')
 gamma = 0.99
 epsilon = 1.0
 lr = 0.00005
-input_dims = 8
+input_dims = 39
 print(input_dims)
 batch_size = 64
 n_actions = 5

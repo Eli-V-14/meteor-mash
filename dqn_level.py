@@ -75,31 +75,11 @@ class Level:
 
         return reward
 
-    def _get_obs(self):
-        closest_asteroid = None
-        closest_distance = float('inf')
-
-        for a in self.asteroids:
-            distance = ((self.spaceship.x - a.x) ** 2 + (self.spaceship.y - a.y) ** 2) ** 0.5
-            if distance < closest_distance:
-                closest_distance = distance
-                closest_asteroid = a
-
-        if closest_asteroid is None:
-            closest_asteroid_state = [0, 0, 0, 0, 0]
-        else:
-            closest_asteroid_state = [
-                closest_asteroid.x / WINDOW_HALF_WIDTH, 
-                closest_asteroid.y / WINDOW_HEIGHT, 
-                closest_asteroid.rank, 
-                closest_asteroid.xv, 
-                closest_asteroid.yv
-            ]
-        
+    def _get_obs(self):        
         return {
             'spaceship_pos': [self.spaceship.x / WINDOW_HALF_WIDTH, self.spaceship.y / WINDOW_HEIGHT],
             'spaceship_rot': [(self.spaceship.angle % 360) / 360],
-            'closest_asteroid': closest_asteroid_state
+            'rays': self.spaceship.raycast(self.asteroids, 36, 2000, 360)
         }
 
     def _get_info(self):
@@ -138,7 +118,8 @@ class Level:
 
         self.check_collisions(delta_time)
 
-        self.spaceship.draw_rays(self.asteroids, 72, 2000)
+        # self.spaceship.draw_rays(self.asteroids, 18, 2000)
+        self.spaceship.raycast(self.asteroids, 36, 2000, 360)
 
         self.spaceship.update(delta_time)
     
@@ -207,13 +188,6 @@ class Level:
             if not a.on_screen():
                 if a in self.asteroids:
                     self.asteroids.remove(a)
-        # for b in bullets_to_remove:
-        #     if b in self.bullets:
-        #         self.bullets.remove(b)
-
-        # for a in asteroids_to_remove:
-        #     if a in self.asteroids:
-        #         self.asteroids.remove(a)
 
     def restart(self):
         self.gameStateManager = self.gameStateManager

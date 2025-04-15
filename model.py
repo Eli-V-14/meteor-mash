@@ -58,7 +58,7 @@ class DQNAgent():
         flattened_state = np.concatenate([
             np.array(state['spaceship_pos']).flatten(),
             np.array(state['spaceship_rot']).flatten(),
-            np.array(state['closest_asteroid'])
+            np.array(state['rays'])
         ])
 
         # print(flattened_state)
@@ -66,7 +66,7 @@ class DQNAgent():
         flattened_state_ = np.concatenate([
             np.array(state_['spaceship_pos']).flatten(),
             np.array(state_['spaceship_rot']).flatten(),
-            np.array(state_['closest_asteroid']).flatten()
+            np.array(state_['rays']).flatten()
         ])
 
         self.state_memory[index] = flattened_state
@@ -82,7 +82,7 @@ class DQNAgent():
             observation = np.concatenate([
                 np.array(observation['spaceship_pos']).flatten(),
                 np.array(observation['spaceship_rot']).flatten(),
-                np.array(observation['closest_asteroid'])
+                np.array(observation['rays'])
             ])
             state = T.tensor([observation], dtype=T.float32).to(self.Q_eval.device)
             actions = self.Q_eval.forward(state)

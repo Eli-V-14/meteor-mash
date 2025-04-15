@@ -107,46 +107,19 @@ class Spaceship:
     def shoot(self):
         return Bullet(self.display, self)
     
-    def raycast(self, asteroids, ray_count, ray_length):
+    def raycast(self, asteroids, ray_count, ray_length, cone_angle=90):
         ray_distances = []
-        angle = 360 / ray_count
-
-        for i in range(ray_count):
-            ray_angle = math.radians(self.angle + i * angle)
-            dx = math.cos(ray_angle)
-            dy = math.sin(ray_angle)
-
-            distance = 0
-            hit = False
-
-            while distance < ray_length:
-                test_x = self.x + dx * distance
-                test_y = self.y + dy * distance
-
-                if test_x < self.top or test_x >= self.bottom or test_y < self.left or test_y >= self.right:
-                    break
-
-                for a in asteroids:
-                    if a.rect.coillidepoint(test_x, test_y):
-                        hit = True
-                        break
-                
-                if hit:
-                    break
-
-            ray_distances.append(distance)
-        
-        return ray_distances
-    
-    def draw_rays(self, asteroids, ray_count, ray_length):
         centered_x = self.x - self.width / 2
         centered_y = self.y - self.height / 2
-        angle = 360 / ray_count
+
+        
+        angle_start = self.angle + 90 - (cone_angle / 2)
+        angle_step = cone_angle / (ray_count - 1)
 
         for i in range(ray_count):
-            ray_angle = math.radians(self.angle + i * angle)
-            dx = math.cos(ray_angle)
-            dy = math.sin(ray_angle)
+            ray_angle = math.radians(angle_start + i * angle_step)
+            dx = math.cos(-ray_angle)
+            dy = math.sin(-ray_angle)
 
             distance = 0
             hit = False
@@ -171,4 +144,8 @@ class Spaceship:
                     break
 
                 distance += 5
+
+            ray_distances.append(distance)
+        
+        return ray_distances
     
