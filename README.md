@@ -31,7 +31,7 @@ Implementing a Deep Q-Learning model to play Asteroids game.
         - Etc.
 
 # Other Outside Sources
-- Source: ChatGPT 
+- ChatGPT:
     - Used for debugging and checking code
     - Used to guide undocumented works with custom environments
         - Used ChatGPT to explain each step for future research and understanding
@@ -39,5 +39,10 @@ Implementing a Deep Q-Learning model to play Asteroids game.
         to help guide me through the process. Since this is my first Deep Learning
         project, I utilized ChatGPT for future references on how to set-up a custom
         environment to test and train on a Deep Q-Leanring model.
+        
+- Fonts: https://www.1001fonts.com/video-game-fonts.html
+    - Used to obtain free-use fonts for styling text for the game
+
+
 
 

@@ -3,6 +3,7 @@ from pygame import Color
 from bullet import Bullet
 import pygame
 import math
+import random
 
 class Spaceship:
     def __init__(self, display):
@@ -13,7 +14,7 @@ class Spaceship:
         # self.img.set_colorkey(Color('blue'))
         # self.scaled_img = pygame.transform.scale(self.img, (100, 100))
 
-        self.angle = 0
+        self.angle = random.randrange(0, 360)
         self.x = WINDOW_HALF_WIDTH / 2 + self.img.get_width() / 2
         self.y = WINDOW_HALF_HEIGHT  + self.img.get_height() / 2
         self.width = self.img.get_width()
@@ -79,30 +80,19 @@ class Spaceship:
         return self.delta_time
     
     def check_borders(self):
-        if self.x > self.right:
-            # self.x = self.left
-            return True
-        elif self.x < self.left:
-            # self.x = self.right
-            return True
-
-        if self.y > self.bottom:
-            # self.y = self.top
-            return True
-        elif self.y < self.top:
-            # self.y = self.bottom
+        if self.x > self.right or self.x < self.left or self.y > self.bottom or self.y < self.top:
             return True
         return False
     
     def move_forward(self):
-        self.x += self.cosine * 250 * self.get_delta_time()
-        self.y += self.sine * 250 * self.get_delta_time()
+        self.x += self.cosine * 350 * self.get_delta_time()
+        self.y += self.sine * 350 * self.get_delta_time()
     
     def move_right(self):
-        self.angle -= 5
+        self.angle -= 10
 
     def move_left(self):
-        self.angle += 5
+        self.angle += 10
     
     def shoot(self):
         return Bullet(self.display, self)
@@ -138,14 +128,14 @@ class Spaceship:
                         hit = True
                         break
 
-                pygame.draw.circle(self.display, Color('gray5'), (int(test_x), int(test_y)), 2)
+                # pygame.draw.circle(self.display, Color('gray5'), (int(test_x), int(test_y)), 2)
 
                 if hit:
                     break
 
                 distance += 5
 
-            ray_distances.append(distance)
+            ray_distances.append((distance, math.cos(ray_angle), math.sin(ray_angle)))
         
         return ray_distances
     

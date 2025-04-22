@@ -63,12 +63,12 @@ class Level:
     
     def get_rewards(self):
         reward = 0  
-        reward += 0.05
+        reward += 0.005
 
-        for a in self.asteroids:
-            dist = ((self.spaceship.x - a.x) ** 2 + (self.spaceship.y - a.y) ** 2) ** 0.5
-            if 50 < dist < 100:
-                reward += 1  
+        # for a in self.asteroids:
+        #     dist = ((self.spaceship.x - a.x) ** 2 + (self.spaceship.y - a.y) ** 2) ** 0.5
+        #     if 50 < dist < 100:
+        #         reward += 1  
 
         reward += self.reward
         self.reward = 0  
@@ -79,7 +79,7 @@ class Level:
         return {
             'spaceship_pos': [self.spaceship.x / WINDOW_HALF_WIDTH, self.spaceship.y / WINDOW_HEIGHT],
             'spaceship_rot': [(self.spaceship.angle % 360) / 360],
-            'rays': self.spaceship.raycast(self.asteroids, 36, 2000, 360)
+            'rays': self.spaceship.raycast(self.asteroids, 72, 2000, 360)
         }
 
     def _get_info(self):
@@ -102,7 +102,7 @@ class Level:
         #         elif event.key == pygame.K_SPACE:
         #             self.shoot()
 
-        if self.count % 75 == 0:
+        if self.count % 50 == 0:
             self.generate_asteroids()
         
         # COMMENTED OUT FOR FULL CAPACITY OF SPACESHIP'S LASER
@@ -118,8 +118,7 @@ class Level:
 
         self.check_collisions(delta_time)
 
-        # self.spaceship.draw_rays(self.asteroids, 18, 2000)
-        self.spaceship.raycast(self.asteroids, 36, 2000, 360)
+        self.spaceship.raycast(self.asteroids, 72, 2000, 360)
 
         self.spaceship.update(delta_time)
     
@@ -150,15 +149,17 @@ class Level:
     def check_collisions(self, delta_time):
         spaceship_rect = pygame.Rect(self.spaceship.x - self.spaceship.width, self.spaceship.y - self.spaceship.height, 
                                      self.spaceship.width, self.spaceship.height)
-        pygame.draw.rect(self.display, Color('green'), spaceship_rect, 2)
+        # pygame.draw.rect(self.display, Color('green'), spaceship_rect, 2)
 
         # bullets_to_remove = []
         # asteroids_to_remove = []
         self.terminated = self.spaceship.check_borders()
+        if self.terminated:
+            self.reward -= 100
 
         for a in self.asteroids:
             asteroid_rect = pygame.Rect(a.x, a.y, a.width, a.height)
-            pygame.draw.rect(self.display, Color('red'), asteroid_rect, 2)
+            # pygame.draw.rect(self.display, Color('red'), asteroid_rect, 2)
 
             if spaceship_rect.colliderect(asteroid_rect):
                 self.terminated = bool(True)
@@ -166,7 +167,7 @@ class Level:
 
             for b in self.bullets:
                 bullet_rect = pygame.Rect(b.x - b.img_width - b.width / 4, b.y - b.img_height, b.width, b.height)
-                pygame.draw.rect(self.display, Color('blue'), bullet_rect, 2)
+                # pygame.draw.rect(self.display, Color('blue'), bullet_rect, 2)
 
                 if asteroid_rect.colliderect(bullet_rect):
                     self.reward += 50                    

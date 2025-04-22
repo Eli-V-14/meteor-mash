@@ -9,20 +9,20 @@ env = gym.make('MeteorMash-v0')
 
 gamma = 0.99
 epsilon = 1.0
-lr = 0.00005
-input_dims = 39
+lr = 1e-4
+input_dims = 219
 print(input_dims)
 batch_size = 64
 n_actions = 5
 max_mem_size = 100000
 eps_end = 0.01
-eps_dec = 1e-3
+eps_dec = 1e-5
 
 agent = DQNAgent(gamma=gamma, epsilon=epsilon, lr=lr, input_dims=(input_dims,), 
                  batch_size=batch_size, n_actions=n_actions, max_mem_size=max_mem_size,
                  eps_end=eps_end, eps_dec=eps_dec)
 
-n_episodes = 1000
+n_episodes = 500
 max_steps = 1000
 episode_rewards = []
 
@@ -40,9 +40,12 @@ for episode in range(n_episodes):
         
         total_reward += reward
 
-        agent.store_transitions(state, action, reward, next_state, bool(terminated))
+        done = terminated or truncated
 
-        agent.learn()
+        agent.store_transitions(state, action, reward, next_state, done)
+
+        if agent.mem_counter > batch_size:
+            agent.learn()
 
         state = next_state
 

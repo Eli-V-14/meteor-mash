@@ -15,8 +15,8 @@ class Bullet:
 
         self.cosine = spaceship.cosine
         self.sine = spaceship.sine
-        self.xv = self.cosine * 500
-        self.yv = -self.sine * 500
+        self.xv = self.cosine * 750
+        self.yv = -self.sine * 750
 
         self.count = 0
     
