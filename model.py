@@ -16,7 +16,7 @@ class DeepQNetwork(nn.Module):
         self.fc3 = nn.Linear(self.fc2_dims, self.n_actions)
         self.optimizer = optim.Adam(self.parameters(), lr=lr)
         self.loss = nn.MSELoss()
-        self.device = T.device('cuda:0' if T.cuda.is_available() else 'cpu')
+        self.device = T.device('cuda')
         self.to(self.device)
 
     def forward(self, state):
@@ -69,6 +69,8 @@ class DQNAgent():
             np.array(state['rays']).flatten()
         ])
 
+        flattened_state = self._normalize(flattened_state)
+
         # print(flattened_state)
 
         flattened_state_ = np.concatenate([
@@ -76,6 +78,8 @@ class DQNAgent():
             np.array(state_['spaceship_rot']).flatten(),
             np.array(state_['rays']).flatten()
         ])
+
+        flattened_state_ = self._normalize(flattened_state_)
 
         self.state_memory[index] = flattened_state
         self.new_state_memory[index] = flattened_state_
@@ -92,7 +96,7 @@ class DQNAgent():
                 np.array(observation['spaceship_rot']).flatten(),
                 np.array(observation['rays']).flatten()
             ])
-            state = T.tensor([observation], dtype=T.float32).to(self.Q_eval.device)
+            state = T.tensor(observation, dtype=T.float32).to(self.Q_eval.device)
             actions = self.Q_eval.forward(state)
             action = T.argmax(actions).item()
         else:
@@ -118,10 +122,11 @@ class DQNAgent():
         q_eval = self.Q_eval.forward(state_batch)[batch_index, action_batch]
 
         q_next = self.Q_target.forward(new_state_batch)
-        q_next[terminal_batch] = 0.0
+        q_next[terminal_batch.bool()] = 0.0
         q_target = reward_batch + self.gamma * T.max(q_next, dim=1)[0]
 
-        loss = self.Q_eval.loss(q_eval, q_target.detach()).to(self.Q_eval.device)
+        # loss = self.Q_eval.loss(q_eval, q_target.detach()).to(self.Q_eval.device)
+        loss = F.smooth_l1_loss(q_eval, q_target.detach())
         loss.backward()
         self.Q_eval.optimizer.step()
 
@@ -131,4 +136,12 @@ class DQNAgent():
 
         self.epsilon = self.epsilon - self.eps_dec if self.epsilon > self.eps_end else self.eps_end
 
+    def _normalize(self, obs):
+        pos = obs[0:2]
+        rot = obs[2:3]
 
+        ray_data = obs[3:].reshape(-1, 3)
+        ray_data[:, 0] = ray_data[:, 0] / 2000.0 
+
+        rays_normalized = ray_data.flatten()
+        return np.concatenate([pos, rot, rays_normalized])

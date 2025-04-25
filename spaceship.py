@@ -24,10 +24,10 @@ class Spaceship:
         self.sine = 0
         self.delta_time = 0
 
-        self.top = -self.img.get_height() / 2
-        self.bottom = WINDOW_HEIGHT + self.img.get_height() / 2
-        self.left = -self.img.get_width() / 2
-        self.right = WINDOW_HALF_WIDTH + self.img.get_width() / 2
+        self.top = self.img.get_height()
+        self.bottom = WINDOW_HEIGHT
+        self.left = self.img.get_width()
+        self.right = WINDOW_HALF_WIDTH
     
     def draw(self, img, rect):
         self.display.blit(img, rect)
@@ -55,8 +55,6 @@ class Spaceship:
             img = pygame.transform.scale(img, (91, 91))
         else:
             img = self.img
-
-        # self.check_borders()
 
         # COMMENTED OUT FOR THE USE OF KEYBOARD INPUTS INSTEAD OF MOUSE LOCATION
         # x_dist = pos[0] - self.x
@@ -89,10 +87,10 @@ class Spaceship:
         self.y += self.sine * 350 * self.get_delta_time()
     
     def move_right(self):
-        self.angle -= 10
+        self.angle -= 5
 
     def move_left(self):
-        self.angle += 10
+        self.angle += 5
     
     def shoot(self):
         return Bullet(self.display, self)
@@ -128,7 +126,7 @@ class Spaceship:
                         hit = True
                         break
 
-                # pygame.draw.circle(self.display, Color('gray5'), (int(test_x), int(test_y)), 2)
+                pygame.draw.circle(self.display, Color('gray5'), (int(test_x), int(test_y)), 2)
 
                 if hit:
                     break

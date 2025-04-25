@@ -32,4 +32,4 @@ class Bullet:
         self.draw(self.display)
     
     def on_screen(self):
-        return 0 < self.x < WINDOW_HALF_WIDTH and 0 < self.y < WINDOW_HEIGHT
+        return 0 + self.img_width < self.x < WINDOW_HALF_WIDTH + self.img_width and 0 + self.img_height < self.y < WINDOW_HEIGHT + self.img_height

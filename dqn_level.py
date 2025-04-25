@@ -37,9 +37,15 @@ class Level:
         self.total_frames += 1
 
         match action:
-            case 0: self.spaceship.move_left()
-            case 1: self.spaceship.move_right()
-            case 2: self.spaceship.move_forward()
+            case 0: 
+                self.spaceship.move_left()
+                # self.reward += 0.005
+            case 1: 
+                self.spaceship.move_right()
+                # self.reward += 0.005
+            case 2: 
+                self.spaceship.move_forward()
+                self.reward += 0.3
             case 3: 
                 if (self.total_frames - self.last_bullet_frame) > 25:
                     self.shoot()
@@ -48,7 +54,6 @@ class Level:
                 pass
             case _:
                 print(f"Invalid action: {action}")
-
 
         terminated = bool(self.terminated)
         truncated = False
@@ -63,13 +68,6 @@ class Level:
     
     def get_rewards(self):
         reward = 0  
-        reward += 0.005
-
-        # for a in self.asteroids:
-        #     dist = ((self.spaceship.x - a.x) ** 2 + (self.spaceship.y - a.y) ** 2) ** 0.5
-        #     if 50 < dist < 100:
-        #         reward += 1  
-
         reward += self.reward
         self.reward = 0  
 
@@ -79,7 +77,7 @@ class Level:
         return {
             'spaceship_pos': [self.spaceship.x / WINDOW_HALF_WIDTH, self.spaceship.y / WINDOW_HEIGHT],
             'spaceship_rot': [(self.spaceship.angle % 360) / 360],
-            'rays': self.spaceship.raycast(self.asteroids, 72, 2000, 360)
+            'rays': self.spaceship.raycast(self.asteroids, 72, 300, 360)
         }
 
     def _get_info(self):
@@ -91,24 +89,11 @@ class Level:
     def run(self, events, delta_time):
         self.count += 1
 
-        delta_time = delta_time if delta_time > 0.01 else 0.016
+        delta_time = delta_time if delta_time > 0.01 else 0.014
         self.render_text()
-        
-        # COMMENTED OUT FOR THE USE OF THE DEEP Q-LEARNING NETWORK
-        # for event in events:
-        #     if event.type == pygame.KEYDOWN:
-        #         if event.key == pygame.K_ESCAPE:
-        #             self.gameStateManager.set_state('pause')
-        #         elif event.key == pygame.K_SPACE:
-        #             self.shoot()
 
         if self.count % 50 == 0:
             self.generate_asteroids()
-        
-        # COMMENTED OUT FOR FULL CAPACITY OF SPACESHIP'S LASER
-        # keys = pygame.key.get_pressed()
-        # if keys[pygame.K_SPACE]:
-        #     self.bullets.append(Bullet(self.display, self.spaceship))
 
         for a in self.asteroids:
             a.update(delta_time)
@@ -118,7 +103,7 @@ class Level:
 
         self.check_collisions(delta_time)
 
-        self.spaceship.raycast(self.asteroids, 72, 2000, 360)
+        self.spaceship.raycast(self.asteroids, 72, 300, 360)
 
         self.spaceship.update(delta_time)
     
@@ -151,11 +136,9 @@ class Level:
                                      self.spaceship.width, self.spaceship.height)
         # pygame.draw.rect(self.display, Color('green'), spaceship_rect, 2)
 
-        # bullets_to_remove = []
-        # asteroids_to_remove = []
         self.terminated = self.spaceship.check_borders()
         if self.terminated:
-            self.reward -= 100
+            self.reward -= 50
 
         for a in self.asteroids:
             asteroid_rect = pygame.Rect(a.x, a.y, a.width, a.height)
@@ -170,21 +153,19 @@ class Level:
                 # pygame.draw.rect(self.display, Color('blue'), bullet_rect, 2)
 
                 if asteroid_rect.colliderect(bullet_rect):
-                    self.reward += 50                    
                     if a.rank > 1:
                         self.split_asteroids(a, a.rank)
                         self.score += 50 * a.rank
-                        self.reward += 25 * a.rank
+                        self.reward += 2.5 * a.rank
 
                     self.score += 50
-                    self.reward += 25
-                    # bullets_to_remove.append(b)
-                    # asteroids_to_remove.append(a)
+                    self.reward += 2.5
                     self.asteroids.remove(a)
                     self.bullets.remove(b)
 
                 if not b.on_screen():
                     if b in self.bullets:
+                        self.reward -= 2
                         self.bullets.remove(b)
             if not a.on_screen():
                 if a in self.asteroids:

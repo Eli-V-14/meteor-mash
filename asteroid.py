@@ -23,15 +23,12 @@ class Asteroid:
                                          (random.choice([-1 * self.width - 5, int(WINDOW_HALF_WIDTH) + 5]), random.randrange(0, int(WINDOW_HEIGHT) - self.height))])
         
         self.x, self.y = self.rand_point
-        # self.x, self.y = WINDOW_HALF_WIDTH / 2, WINDOW_HALF_HEIGHT
 
         self.xdir = 1 if self.x < WINDOW_HALF_WIDTH // 2 else -1
         self.ydir = 1 if self.y < WINDOW_HEIGHT // 2 else -1
         
-        self.xv = self.xdir * random.randrange(1, 3) * 100
-        self.yv = self.ydir * random.randrange(1, 3) * 100
-        # self.xv = 0
-        # self.yv = 0
+        self.xv = self.xdir * random.randrange(1, 3) * 150
+        self.yv = self.ydir * random.randrange(1, 3) * 150
 
     def move(self, delta_time):
         self.x += self.xv * delta_time
